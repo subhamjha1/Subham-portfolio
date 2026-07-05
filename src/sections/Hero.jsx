@@ -1,54 +1,30 @@
-import React from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Float } from "@react-three/drei";
 import HeroText from "../components/HeroText";
-import ParallexBackground from "../components/ParallexBackground";
-import { Astronaut } from "../components/Astronaut";
-import { OrbitControls } from "@react-three/drei";
-import { useMediaQuery } from "react-responsive";
-import { easing } from "maath";
-import { Suspense } from "react";
-import Loader from "../components/Loader";
+import { motion } from "motion/react";
 
 const Hero = () => {
-  const isMobile = useMediaQuery({ maxWidth: 853 });
   return (
     <section
-      className="flex items-start justify-center md:items-start md:justify-start min-h-screen overflow-hidden c-space"
+      className="flex items-center justify-between min-h-screen overflow-hidden c-space relative"
       id="home"
     >
       <HeroText />
-      <ParallexBackground />
-      <figure
-        className="absolute inset-0"
-        style={{ width: "100vw", height: "100vh" }}
+      <motion.div
+        className="hidden md:flex absolute right-16 top-1/2 -translate-y-1/2"
+        initial={{ opacity: 0, x: 80 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 1.2, duration: 0.8 }}
       >
-        <Canvas camera={{ position: [0, 1, 3] }}>
-          <Suspense fallback={<Loader />}>
-            <Float>
-              <Astronaut
-                scale={isMobile && 0.23}
-                position={isMobile && [0, -1.5, 0]}
-              />
-            </Float>
-
-            <Rig />
-          </Suspense>
-        </Canvas>
-      </figure>
+        <div className="relative">
+          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500/30 to-purple-600/30 blur-2xl scale-110" />
+          <img
+            src="/assets/mypic/myPic1.jpg"
+            alt="Subham Jha"
+            className="relative w-72 h-72 lg:w-96 lg:h-96 rounded-full object-cover object-top border-2 border-white/10 shadow-2xl"
+          />
+        </div>
+      </motion.div>
     </section>
   );
 };
-
-function Rig() {
-  return useFrame((state, delta) => {
-    easing.damp3(
-      state.camera.position,
-      [state.mouse.x / 10, 1 + state.mouse.y / 10, 3],
-      0.5,
-      delta
-    );
-  });
-}
 
 export default Hero;
